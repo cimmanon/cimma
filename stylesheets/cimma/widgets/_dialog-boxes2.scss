@@ -1,0 +1,238 @@
+// --------------------------------------------------------------------------------
+// Dialog boxes:  attractive, scalable dialog boxes
+// --------------------------------------------------------------------------------
+
+// Spritemaps are assumed to be horizontal and the sprites are expected to be in the same order defined
+// If you're using an SVG as a background, pass it as a list with a bitmap image placed last
+
+@import "compass/css3/background-size";
+
+// ---------- Color/image definitions
+$dialog-namespace: d !default;
+$dialog-icon-width: 24px !default;
+$dialog-icon-height: 24px !default;
+$dialog-padding: 1em !default;
+$dialog-border: 2px solid !default;
+$dialog-fc-multiplier: 1.4 !default;
+
+// class name | color | bg-color | image
+$dialog-attributes:
+	( help    #2E3192 #B9C2E1 url(icons/dialog-help.png) // yellow
+	, info    #005FB4 #BDE5F8 url(icons/dialog-info.png) // blue
+	, success #6F7D03 #DFE5B0 url(icons/dialog-success.png) // green
+	, warning #A0410D #EFBBA0 url(icons/dialog-warning.png) // orange
+	, error   #C41616 #F8AAAA url(icons/dialog-error.png) // red
+	) !default;
+
+// ---------- Container styling
+@mixin dialog-box-simple($tag, $attributes: $dialog-attributes, $ns: $dialog-namespace) {
+	$collector: ();
+	
+	@each $a in $attributes {
+		$name: nth($a, 1);
+		$color: nth($a, 2);
+		$bg: nth($a, 3);
+
+		$cur: append-selector("#{$tag}", ".#{$name}");
+		
+		%#{$ns}-#{$name}-color {
+			@include dialog-common-color($color, $bg);
+		}
+
+		#{$cur} {
+			@extend %#{$ns}-#{$name}-color;
+		}
+		
+		$collector: append($collector, $cur, comma);
+	}
+	
+	#{$collector} {
+		@content;
+	}
+}
+
+@mixin dialog-box-sprite($spritemap, $container: (div, aside), $single: p, $attributes: $dialog-attributes, $ns: $dialog-namespace, $icon-width: $dialog-icon-width, $icon-height: $dialog-icon-height, $padding: $dialog-padding, $border: $dialog-border, $fc-multiplier: $dialog-fc-multiplier) {
+	$col-container: ();
+	$col-single: ();
+	
+	$offset: 0;
+	@each $a in $attributes {
+		$name: nth($a, 1);
+		$color: nth($a, 2);
+		$bg: nth($a, 3);
+	
+		%#{$ns}-#{$name}-color {
+			@include dialog-common-color($color, $bg, $border);
+		}
+
+		$cur-container: append-selector("#{$container}", ".#{$name}");
+		$cur-single: append-selector("#{$single}", ".#{$name}");
+		
+		#{$cur-single}, #{$cur-container} {
+			@extend %#{$ns}-#{$name}-color;
+		}
+		
+		#{$cur-single}, #{nest("#{$cur-container}", "> :first-child")} {
+			&:before {
+				background-position: $offset 0;
+			}
+		}
+		
+		$col-container: append($col-container, $cur-container, comma);
+		$col-single: append($col-single, $cur-single, comma);
+		$offset: $offset - $icon-width;
+	}
+	
+	#{$col-container} {
+		@include dialog-container-sprite($padding, $fc-multiplier);
+	}
+	
+	#{$col-single} {
+		@include dialog-single-sprite($padding);
+	}
+		
+	#{$col-container}, #{$col-single} {
+		@content;
+	}
+	
+	#{nest("#{$col-container}", "> :first-child")}, #{$col-single} {
+		&:before {
+			@include dialog-icon-sprite($icon-width, $icon-height, length($dialog-attributes) * $icon-width $icon-height);
+			@if length($spritemap) > 1 {
+				// http://www.broken-links.com/2010/06/14/using-svg-in-backgrounds-with-png-fallback/
+				background-image: nth($spritemap, length($spritemap));
+				background-image: none, $spritemap; // hack to hide SVGs from IE
+			} @else {
+				background-image: $spritemap;
+			}
+		}
+	}
+}
+
+@mixin dialog-box-inline($container: (div, aside), $single: p, $attributes: $dialog-attributes, $ns: $dialog-namespace) {
+	$col-container: ();
+	$col-single: ();
+	
+	@each $a in $attributes {
+		$name: nth($a, 1);
+		$color: nth($a, 2);
+		$bg: nth($a, 3);
+		$image: nth($a, 4);
+	
+		%#{$ns}-#{$name}-color {
+			@include dialog-common-color($color, $bg, $border);
+		}
+
+		%#{$ns}-#{$name}-bg {
+			background-image: $image;
+			// possibly also add background-position here
+		}
+		
+		$cur-container: append-selector("#{$container}", ".#{$name}");
+		$cur-single: append-selector("#{$single}", ".#{$name}");
+		
+		#{$cur-single}, #{$cur-container} {
+			@extend %#{$ns}-#{$name}-color;
+		}
+		
+		#{$cur-single}, #{nest("#{$cur-container}", "> :first-child")} {
+			background-image: $image;
+		}
+		$col-container: append($col-container, $cur-container, comma);
+		$col-single: append($col-single, $cur-single, comma);
+	}
+	
+	#{$col-container} {
+		@include dialog-container-inline;
+	}
+	
+	#{$col-single} {
+		@include dialog-single-inline;
+	}
+		
+	#{$col-container}, #{$col-single} {
+		@content;
+	}
+	
+	#{nest("#{$col-container}", "> :first-child")}, #{$col-single} {
+		@include dialog-icon-inline;
+	}
+}
+
+// -------------------------------------------------------------------------------- Common styling
+
+@mixin dialog-single-common {
+	font-weight: bold;
+}
+
+@mixin dialog-container-common($fc-multiplier: $dialog-fc-multiplier) {
+	overflow: hidden;
+	> :first-child {
+		margin-top: 0;
+		font-size: $fc-multiplier * 1em;
+		line-height: 1em;
+		@content;
+	}
+	> :last-child { margin-bottom: 0 }
+	> * { color: inherit; position: relative; }
+}
+
+@mixin dialog-common-color($color, $bg, $border: $dialog-border) {
+	color: $color;
+	background-color: $bg;
+//	border: $border;
+}
+
+// -------------------------------------------------------------------------------- Spritemaps
+
+@mixin dialog-icon-sprite($icon-width: $dialog-icon-width, $icon-height: $dialog-icon-height, $bg-size: length($dialog-attributes) * $dialog-icon-width $dialog-icon-height) {
+	content: " ";
+	text-indent: -10em;
+	display: inline-block;
+	width: $icon-width;
+	height: $icon-height;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	@include background-size($bg-size);
+}
+
+@mixin dialog-single-sprite($padding: $dialog-padding) {
+	@include dialog-single-common;
+//	padding-left: $padding;
+	
+	&:before {
+		margin-right: $padding;
+	}
+}
+
+@mixin dialog-container-sprite($padding: $dialog-padding, $fc-multiplier: $dialog-fc-multiplier) {
+	@include dialog-container-common($fc-multiplier) {
+		&:before {
+			margin-right: $padding / $fc-multiplier;
+		}
+	}
+}
+
+// -------------------------------------------------------------------------------- Inline icons
+
+@mixin dialog-icon-inline($icon-width: $dialog-icon-width, $icon-height: $dialog-icon-height) {
+	background-repeat: no-repeat;
+	@include background-size($icon-width $icon-height);
+}
+
+@mixin dialog-single-inline($icon-width: $dialog-icon-width, $padding: $dialog-padding) {
+	@include dialog-single-common;
+	
+	@if (not comparabe($icon-width, $padding)) {
+		@warn "Icon width isn't comparable to the provided padding size, falling back on padding size";
+	}
+	padding-left: if(not comparabe($icon-width, $padding), $padding, $icon-width) + ($padding * 2);
+	background-position: $padding center;
+}
+
+@mixin dialog-container-inline($padding: $dialog-padding, $icon-width: $dialog-padding, $fc-multiplier: $dialog-fc-multiplier) {
+	@include dialog-container-common($fc-multiplier) {
+		padding-left: $icon-width + ($padding / $fc-multiplier);
+		background-position: left center;
+	}
+}

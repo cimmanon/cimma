@@ -1,0 +1,141 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+@import "compass/css3/box-sizing";
+
+@import "../../misc/effects";
+
+$form-default-glow: #BDE5F8 !default;
+$form-error-glow: #F8AAAA !default;
+$form-valid-glow: darken(#DFE5B0, 10%) !default;
+
+$form-input-border: 1px solid #CCC !default;
+$form-input-width: 15em !default;
+$form-textarea-height: 5em !default;
+
+// ====================================================================================================
+//                                                                       | Form Controls
+// ====================================================================================================
+
+input, textarea, select {
+	font-size: inherit;
+	padding: .25em;
+	@include box-sizing(border-box);
+	
+	&:focus {
+		@include soft-outer-glow($form-default-glow);
+		outline: none;
+		
+		&:invalid, &:out-of-range {
+			@include soft-outer-glow($form-error-glow);
+		}
+		
+		&:valid, &:in-range {
+			@include soft-outer-glow($form-valid-glow);
+		}
+	}
+}
+
+textarea {
+	height: $form-textarea-height;
+}
+
+#{$form-input-text}, textarea {
+	@include border-radius(.25em);
+	border: $form-input-border;
+}
+
+#{$form-input-text}, textarea {
+	width: $form-input-width;
+	max-width: 100%;
+	-webkit-appearance: textfield
+}
+
+input, textarea {
+	&.x-small { width: 2.5em }
+	&.small { width: 5em }
+	&.medium { width: 15em }
+	&.large { width: 25em }
+	&.x-large { width: 50em }
+	&.maximum { width: 100% }
+}
+
+#{$form-input-buttons} {
+	padding: .25em .5em;
+}
+
+// ====================================================================================================
+//                                                                       | Fieldsets
+// ====================================================================================================
+
+fieldset {
+	border: 1px solid;
+	padding: 1em;
+}
+
+fieldset%reset {
+	border: none;
+	padding: none;
+}
+
+fieldset ul {
+	margin-left: 0; padding-left: 0; list-style-type: none;
+}
+
+fieldset%silent {
+	@extend fieldset%reset;
+
+	legend {
+		display: none;
+	}
+}
+
+fieldset%subform {
+	legend {
+		cursor: pointer;
+		cursor: hand;
+	}
+	
+	legend:after {
+//		content: " (Edit Mode)";
+	}
+
+	&[disabled] legend:after {
+		content: " (Disabled)";
+	}
+
+	&.modified legend:after {
+		content: " (Modified)";
+	}
+
+	&.modified[disabled] legend:after {
+		content: " (Cancelled)";
+	}
+}
+
+// ====================================================================================================
+//                                                                       | Labels
+// ====================================================================================================
+
+label {
+	white-space: nowrap;
+	
+	#{$form-input-not-radio} {
+		@media (max-width: 35em) {
+			display: block;
+		}
+	}
+}
+
+// ====================================================================================================
+//                                                                       | Forms
+// ====================================================================================================
+
+form.simplified, form .simplified {
+	@extend form%simplified;
+}
+
+form%simplified {
+	> label, label select, label textarea, label #{$form-input-not-radio} {
+		display: block;
+	}
+}

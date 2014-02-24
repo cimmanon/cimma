@@ -1,0 +1,51 @@
+$baseline-font-family: $sans-serif !default;
+
+$line-height: 1.4 !default;
+
+$a-link   : #016bb0 !default; // dark cerulean
+$a-visited: #662d91 !default; // royal purple
+$a-hover  : lighten($a-link, 15%) !default;
+
+// -------------------------------------------------------------------------------- Block Elements
+
+body {
+	font: 100%/#{$line-height} $baseline-font-family;
+}
+
+%baseline-common-block, #{headings()}, p, ul, ol, dl, table, blockquote, div, section, article, aside, fieldset, hgroup {
+	margin: 1em 0;
+
+	&:first-child {
+		margin-top: 0;
+	}
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// -------------------------------------------------------------------------------- Inline Elements
+
+a {
+	color: $a-link;
+	&:visited { color: $a-visited; }
+	&:hover { color: $a-hover; }
+}
+
+
+abbr[title] { // Addresses styling not present in IE 8/9, Safari 5, and Chrome.
+	border-bottom: 1px dotted;
+}
+
+address {
+	white-space: pre;
+	white-space: pre-line;
+}
+
+b, strong { // Addresses style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
+	font-weight: bold;
+}
+
+small {
+	font-size: .8em; // Addresses inconsistent and variable font size in all browsers.
+}

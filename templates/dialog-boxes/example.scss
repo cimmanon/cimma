@@ -1,0 +1,42 @@
+@import "cimma/widgets/dialog-boxes";
+
+// ---------- Color/image definitions
+$dialog-namespace: d;
+$dialog-icon-width: 24px;
+$dialog-icon-height: 24px;
+$dialog-padding: 1em;
+$dialog-border: 2px solid;
+$dialog-fc-multiplier: 1.4;
+
+// class name | color | bg-color | image
+$dialog-attributes:
+	( help    #2E3192 #B9C2E1 // yellow
+	, info    #005FB4 #BDE5F8 // blue
+	, success #6F7D03 #DFE5B0 // green
+	, warning #A0410D #EFBBA0 // orange
+	, error   #C41616 #F8AAAA // red
+	);
+
+@include dialog-box((image-url("cimma/dialog-boxes/spritemap.svg"), image-url("cimma/dialog-boxes/spritemap.png"))) {
+	@include border-radius(.5em);
+	margin: 1em 0 0 0;
+	padding: 1em;
+	
+	&:first-child {
+		margin-top: 0;
+	}
+}
+
+aside.dialog {
+	@extend div.dialog;
+	@extend %dialog-colors;
+}
+
+ol.dialog {
+	@extend ul.dialog;
+	@extend %dialog-colors;
+}
+
+tr {
+	@extend %dialog-colors;
+}

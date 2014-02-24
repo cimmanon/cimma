@@ -1,0 +1,25 @@
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+	display: block; // Corrects `block` display not defined in IE 8/9.
+}
+
+audio, canvas, video {
+	display: inline-block; // Corrects `inline-block` display not defined in IE 8/9.
+}
+
+audio:not([controls]) {
+	display: none; // Prevents modern browsers from displaying `audio` without controls.
+	height: 0; // Remove excess height in iOS 5 devices.
+}
+
+[hidden] {
+	display: none; // Addresses styling for `hidden` attribute not present in IE 8/9.
+}
+
+figure {
+	//margin: 0; // Addresses margin not present in IE 8/9 and Safari 5.
+}
+
+summary {
+	cursor: pointer;
+	cursor: hand;
+}

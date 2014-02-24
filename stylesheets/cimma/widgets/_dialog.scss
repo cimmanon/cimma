@@ -1,0 +1,85 @@
+@import "compass/utilities/color/contrast";
+
+// ====================================================================================================
+//                                                                       | Colors
+// ====================================================================================================
+
+$background-color: white !default;
+$foreground-color: black !default;
+
+//      name     dark    light
+$dialog-help:    #2E3192 #B9C2E1 !default; // purple
+$dialog-info:    #005FB4 #BDE5F8 !default; // blue
+$dialog-success: #6F7D03 #DFE5B0 !default; // green
+$dialog-warning: #A0410D #EFBBA0 !default; // orange
+$dialog-error:   #C41616 #F8AAAA !default; // red
+
+$dialog-attributes:
+	( help    nth($dialog-help, 1) nth($dialog-help, 2)
+	, info    nth($dialog-info, 1) nth($dialog-info, 2)
+	, success nth($dialog-success, 1) nth($dialog-success, 2)
+	, warning nth($dialog-warning, 1) nth($dialog-warning, 2)
+	, error   nth($dialog-error, 1) nth($dialog-error, 2)
+	) !default;
+
+// ====================================================================================================
+//                                                                       | Extend Classes
+// ====================================================================================================
+
+@import "buttons";
+
+@each $a in $dialog-attributes {
+	$name: nth($a, 1);
+	$color: nth($a, 2);
+	$bg: nth($a, 3);
+
+//	%dialog-colors.#{$name} {
+//		color: $color;
+//		background-color: $bg;
+//	}
+
+	%dialog-colors-inverted.#{$name} {
+		color: $bg;
+		background-color: $color;
+	}
+
+	%dialog-colors-light.#{$name} {
+		background-color: $bg;
+		color: contrast-color($color);
+	}
+
+	%dialog-colors-dark.#{$name} {
+		background-color: $color;
+		color: contrast-color($color);
+	}
+
+	%badge-colors.#{$name} {
+		background-color: $color;
+		color: $background-color;
+	}
+
+	%button-colors.#{$name} {
+		@include button($base: $bg) {
+			@include button-text($color, inset);
+
+			@include button-states;
+		}
+	}
+
+	%button-colors-inverted.#{$name} {
+		@include button($base: $color) {
+			@include button-text($bg, inset);
+
+			@include button-states;
+		}
+	}
+
+	%button-colors-faded.#{$name} {
+		@include button($base: fade($bg, 10%)) {
+//			@include button-text($color, inset);
+			color: #CCC;
+
+			@include button-states;
+		}
+	}
+}

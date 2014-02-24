@@ -1,0 +1,129 @@
+// --------------------------------------------------------------------------------
+// Dialog boxes:  attractive, scalable dialog boxes
+// --------------------------------------------------------------------------------
+
+// Spritemaps are assumed to be horizontal and the sprites are expected to be in the same order defined
+// If you're using an SVG as a background, pass it as a list with a bitmap image placed last
+
+@import "compass/css3/background-size";
+@import "translucencss/util/images";
+
+// ---------- Color/image definitions
+$dialog-icon-width: 24px !default;
+$dialog-icon-height: 24px !default;
+$dialog-padding: 1em !default;
+$dialog-border: 2px solid !default;
+$dialog-fc-multiplier: 1.4 !default;
+
+// class name | color | bg-color
+$dialog-attributes:
+	( help    #2E3192 #B9C2E1 // yellow
+	, info    #005FB4 #BDE5F8 // blue
+	, success #6F7D03 #DFE5B0 // green
+	, warning #A0410D #EFBBA0 // orange
+	, error   #C41616 #F8AAAA // red
+	) !default;
+
+@mixin dialog-box($spritemap, $attributes: $dialog-attributes, $icon-width: $dialog-icon-width, $icon-height: $dialog-icon-height, $padding: $dialog-padding, $border: $dialog-border, $fc-multiplier: $dialog-fc-multiplier, $class: dialog) {
+	$offset: 0;
+	@each $a in $dialog-attributes {
+		$name: nth($a, 1);
+		$color: nth($a, 2);
+		$bg: nth($a, 3);
+	
+		%dialog-colors.#{$name} {
+			@include dialog-color($color, $bg);
+		}
+		
+		p.#{$class}.#{$name}, div.#{$class}.#{$name} > :first-child, ul.#{$class}.#{$name} li:only-child {
+			&:before {
+				background-position: $offset 0;
+			}
+			$icon-width: 24px;
+			$offset: $offset - $icon-width;
+		}
+	}
+	
+	.dialog:first-child {
+		margin-top: 0;
+	}
+	
+	p.#{$class}, div.#{$class}, ul.#{$class} {
+		padding: $padding;
+		border: $border;
+		@content;
+		@extend %dialog-colors;
+	}
+	
+	p.#{$class}, ul.#{$class} {
+		@include dialog-p;
+	}
+	
+	div.#{$class} {
+		@include dialog-div($fc-multiplier * 1em);
+	}
+	
+	ul.#{$class} {
+		$border-width: if(type-of(nth($border, 1)) != number, 0, nth($border, 1));
+		@include dialog-ul($border-width);
+	}
+	
+	p.#{$class}, div.#{$class} > :first-child, ul.#{$class} li:only-child {
+		&:before {
+			background: $spritemap no-repeat;
+			@if length($spritemap) > 1 {
+				@include svg-background(nth($spritemap, 1));
+			}
+			@include dialog-sprite($padding, $icon-width, $icon-height, length($dialog-attributes) * $icon-width $icon-height);
+		}
+	}
+}
+
+// -------------------------------------------------------------------------------- Common styling
+
+@mixin dialog-p {
+	&:first-line { font-weight: bold; }
+}
+
+@mixin dialog-div($font-size: 1.4em) {
+	> :first-child {
+		font-size: $font-size;
+		line-height: 1em;
+		margin-top: 0;
+		
+		&:before {
+			@include rem(font-size, 1rem, 1em, scale-em($font-size, 1));
+		}
+	}
+	> :last-child { margin-bottom: 0 }
+	> * { color: inherit; }
+}
+
+@mixin dialog-ul($border-width: 2px) {
+	padding-left: 2em;
+	
+	li {
+		margin-left: -$border-width;
+	}
+	
+	li:only-child {
+		list-style-type: none;
+		margin-left: -1em;
+	}
+}
+
+@mixin dialog-color($color, $bg) {
+	color: $color;
+	background-color: $bg;
+}
+
+@mixin dialog-sprite($padding: $dialog-padding, $width: $dialog-icon-width, $height: $dialog-icon-height, $bg-size: length($dialog-attributes) * $dialog-icon-width $dialog-icon-height) {
+	content: " ";
+	margin-right: $padding;
+	text-indent: 110%;
+	display: inline-block;
+	width: $width;
+	height: $height;
+	vertical-align: middle;
+	@include background-size($bg-size);
+}

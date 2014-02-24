@@ -1,0 +1,11 @@
+// -------------------------------------------------------------------------------- Ordered Lists
+
+ul, ol {
+	padding-left: 2em;
+}
+
+// -------------------------------------------------------------------------------- Definition Lists
+
+dt { font-weight: bold }
+dd { margin-left: 0.5em; border-left: .5em solid; padding-left: 1em }
+dd + dt { margin-top: .75em }

@@ -1,0 +1,30 @@
+@import "modular-scale";
+
+$heading-modular-sizes: true !default;
+$heading-font-family: $optima !default;
+$heading-scale-start: -2 !default;
+$heading-scale: major-third() !default;
+
+$heading-size-list: modular-scale-list($heading-scale-start, $heading-scale-start + 5, 1em, $heading-scale) !default;
+
+@include headings {
+	font-family: $heading-font-family;
+	font-weight: 700;
+	@extend %size !optional;
+}
+
+@if $heading-modular-sizes {
+	$i: 6;
+	@each $s in $heading-size-list {
+		@if $s != unquote("MS-LIST:") { // this is stupid, why is this here?
+			h#{$i}%size {
+				font-size: $s;
+
+				@if $s > 1em {
+					margin: scale-em($s, 1em) 0;
+				}
+			}
+			$i: $i - 1;
+		}
+	}
+}

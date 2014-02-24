@@ -1,0 +1,52 @@
+$table-background: white !default;
+$table-border: 1px solid !default;
+$table-zebra-background: #CCC !default;
+
+table%bordered {
+	@include bordered-table($table-border);
+}
+
+table {
+	* { font-size: inherit; }
+	th, td { empty-cells: show; }
+	tbody th { text-align: left }
+	
+	tfoot {
+		td[colspan], th[colspan] {
+			text-align: right;
+		}
+	}
+	
+	@media (max-width: 35em) {
+		th[abbr] { content: attr(abbr) }
+	}
+	
+	&.tabular {
+		@extend %bordered;
+		@include zebra-striping {
+			background: $table-zebra-background;
+		}
+	}
+	
+	&.associative tbody th[colspan] {
+		text-align: center;
+	}
+}
+
+td {
+	&.decimal, &.currency {
+		text-align: right;
+		text-align: '.'; // no browser implements this (yet)
+	}
+	
+	&.fraction {
+		text-align: center;
+		text-align: '/'; // no browser implements this (yet)
+	}
+	
+	&.numeric, &.range, &.small {
+		text-align: center;
+	}
+
+	ul { padding-left: 1em; }
+}

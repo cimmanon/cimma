@@ -1,0 +1,24 @@
+// ====================================================================================================
+//                                                                       | General Color Settings
+// ====================================================================================================
+
+$background-color: white !default;
+$foreground-color: black !default;
+
+// ====================================================================================================
+//                                                                       | Widgets: Dialog Colors
+// ====================================================================================================
+
+$dialog-help:    #2E3192 #B9C2E1 !default; // purple
+$dialog-info:    #005FB4 #BDE5F8 !default; // blue
+$dialog-success: #6F7D03 #DFE5B0 !default; // green
+$dialog-warning: #A0410D #EFBBA0 !default; // orange
+$dialog-error:   #C41616 #F8AAAA !default; // red
+
+$dialog-attributes:
+	( help    nth($dialog-help, 1) nth($dialog-help, 2)
+	, info    nth($dialog-info, 1) nth($dialog-info, 2)
+	, success nth($dialog-success, 1) nth($dialog-success, 2)
+	, warning nth($dialog-warning, 1) nth($dialog-warning, 2)
+	, error   nth($dialog-error, 1) nth($dialog-error, 2)
+	) !default;

@@ -1,0 +1,83 @@
+@import "compass/utilities/color/contrast";
+
+$table-adaptive-border-color: #EEE !default;
+$table-adaptive-max-width: 35em !default;
+
+$table-major-background: #CCC !default;
+$table-minor-background: #EEE !default;
+
+@media (max-width: $table-adaptive-max-width) {
+	table%adaptive, table.adaptive {
+		border: none;
+		&, tbody, tr, th, td, caption { display: block }
+		thead { display: none }
+		tbody { border: 1px solid }
+		tr { border-width: 0 0 1px 0; }
+		td:empty, th:empty { display: none }
+		th { border: none }
+		td {
+			border: none;
+			padding-left: 2em;
+			text-align: left !important;
+			
+//			&:first-child + td ~ td { border-top: 1px solid $table-zebra-color }
+		}
+//		tr:nth-child(even) td { border-color: $table-adaptive-border-color !important }
+
+//		tbody:only-of-type td ~ td,
+//		tbody:not(:only-of-type) tr:first-child td ~ td,
+//		tbody:not(:only-of-type) tr ~ tr td {
+		td[data-label] {
+			&:before {
+				content: attr(data-label);
+				display: inline-block;
+				width: 6em;
+				padding-right: 1em;
+				vertical-align: middle;
+			}
+		}
+
+		%inherited-link-color {
+			a {
+				color: inherit;
+			}
+		}
+	}
+
+	table.adaptive {
+		td.major {
+			padding: .25em .5em;
+			@include contrasted($table-major-background);
+
+			@if lightness($table-major-background) < 70% {
+				@extend %inherited-link-color;
+			} 
+		}
+
+		td.minor {
+			@include contrasted($table-minor-background);
+
+			@if lightness($table-minor-background) < 70% {
+				@extend %inherited-link-color;
+			} 
+		}
+		
+		tbody:only-of-type,
+		tbody:not(:only-of-type) tr:first-child {
+			td:first-child {
+				@extend td.major;
+			}
+		}
+
+		tbody:not(:only-of-type) {
+			tr:first-child td:not([rowspan]),
+			tr:first-child ~ tr td:first-child {
+				@extend td.minor;
+						
+				~ td:not([rowspan]) {
+					background: transparent; 
+				}
+			}
+		}
+	}
+}

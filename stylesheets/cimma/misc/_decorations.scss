@@ -1,0 +1,17 @@
+@include inset($offset: 2px, $position: relative, $el: after, $padding: $offset, $z-index: 1) {
+	position: $position;
+	padding: $padding;
+	z-index: $z-index;
+
+	&:#{$el} {
+		position: absolute;
+		z-index: -1; // to prevent it from overlaying the parent element's content
+		content: '';
+		display: block;
+		top: $offset;
+		right: $offset;
+		bottom: $offset;
+		left: $offset;
+		@content;
+	}
+}

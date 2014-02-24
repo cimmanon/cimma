@@ -1,0 +1,20 @@
+#{$form-input-text} {
+	&:invalid, &:out-of-range {
+//		background: url('../extensions/cimma/templates/forms/images/spritemap.svg') no-repeat right -12em;
+		background-size: 5em 13em;
+	
+		&:focus {
+		background-position: right -8em;
+		//embed testing
+//			background: inline-image('cimma/forms/invalid.svg', unquote('image/svg+xml')) no-repeat right center;
+			background-size: 1em 1em;
+		}
+	}
+
+	&[required]:valid, &[required]:in-range {
+		&:focus {
+//			background: url('../extensions/cimma/templates/forms/images/spritemap.svg') no-repeat right -4em;
+			background-size: 5em 13em;
+		}
+	}
+}

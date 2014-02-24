@@ -1,0 +1,32 @@
+// http://sachagreif.com/useful-sass-mixins/
+
+$emboss-highlight: rgba(white, 0.5) !default;
+$emboss-lowlight: rgba(black, 0.5) !default;
+
+// ====================================================================================================
+//                                                                       | Box Effects
+// ====================================================================================================
+
+@mixin emboss-box {
+    box-shadow: 0 1px 0 $emboss-highlight, inset 0 1px 0 $emboss-lowlight;
+}
+
+
+@mixin soft-outer-glow($color) {
+	@include box-shadow(0px 0px .25em .25em $color);
+}
+
+// ====================================================================================================
+//                                                                       | Text Effects
+// ====================================================================================================
+
+@mixin letterpress-text($direction: inset) {
+	$offset: if($direction == inset, 1, -1);
+    text-shadow: $offset 1px 0 $emboss-lowlight;
+}
+
+@mixin emboss-text($direction: inset) {
+	text-shadow:
+		-1px -1px 1px if($direction == inset, $emboss-lowlight, $emboss-highlight),
+		1px 1px 1px if($direction == inset, $emboss-highlight, $emboss-lowlight);
+}
