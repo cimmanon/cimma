@@ -5,7 +5,9 @@
 
 	&:#{$el} {
 		position: absolute;
-		z-index: -1; // to prevent it from overlaying the parent element's content
+		@if $el == after {
+			z-index: -1; // to prevent it from overlaying the parent element's content
+		}
 		content: '';
 		display: block;
 		top: $offset;
