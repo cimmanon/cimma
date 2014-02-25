@@ -1,4 +1,4 @@
-@include inset($offset: 2px, $position: relative, $el: after, $padding: $offset, $z-index: 1) {
+@mixin inset($offset: 2px, $position: relative, $el: after, $padding: $offset, $z-index: 1) {
 	position: $position;
 	padding: $padding;
 	z-index: $z-index;
