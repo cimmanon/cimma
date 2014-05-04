@@ -1,11 +1,20 @@
 @import "modular-scale";
 
+@function ms-list2($start, $end, $base, $ratio) {
+	$list: ();
+	@for $i from $start through $end {
+		$list: append($list, ms-calc($i, $base, $ratio));
+	}
+	@return $list;
+}
+
 $heading-modular-sizes: true !default;
 $heading-font-family: $optima !default;
-$heading-scale-start: -2 !default;
-$heading-scale: major-third() !default;
+$heading-scale-start: 3 !default;
+$heading-scale: $major-third !default;
 
-$heading-size-list: modular-scale-list($heading-scale-start, $heading-scale-start + 5, 1em, $heading-scale) !default;
+$heading-size-list: ms-list2($heading-scale-start, $heading-scale-start - 5, 1em, $heading-scale) !default;
+//@debug $heading-size-list;
 
 @include headings {
 	font-family: $heading-font-family;
@@ -14,17 +23,13 @@ $heading-size-list: modular-scale-list($heading-scale-start, $heading-scale-star
 }
 
 @if $heading-modular-sizes {
-	$i: 6;
-	@each $s in $heading-size-list {
-		@if $s != unquote("MS-LIST:") { // this is stupid, why is this here?
-			h#{$i}%size {
-				font-size: $s;
+	@for $i from 1 through length($heading-size-list) {
+		h#{$i}%size {
+			font-size: nth($heading-size-list, $i);
 
-				@if $s > 1em {
-					margin: scale-em($s, 1em) 0;
-				}
+			@if nth($heading-size-list, $i) > 1em {
+				margin: scale-em(nth($heading-size-list, $i), 1em) 0;
 			}
-			$i: $i - 1;
 		}
 	}
 }
