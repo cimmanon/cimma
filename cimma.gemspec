@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   # Gem Bookkeeping
   s.rubygems_version = %q{1.3.6}
-  s.add_dependency("compass", [">= 0.11"])
+  s.add_dependency("compass", [">= 1.0"])
   s.add_dependency("translucencss", [">= 0.1.1"])
   s.add_dependency("modular-scale", [">= 1.0"])
 end
