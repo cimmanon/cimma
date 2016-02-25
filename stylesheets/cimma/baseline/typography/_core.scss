@@ -12,7 +12,7 @@ body {
 	font: 100%/#{$line-height} $baseline-font-family;
 }
 
-%baseline-common-block, #{headings()}, p, ul, ol, dl, table, blockquote, div, main, section, article, aside, fieldset, hgroup {
+%baseline-common-block, #{headings()}, p, ul, ol, dl, table, blockquote, div, main, section, article, aside, fieldset {
 	margin: 1em 0;
 
 	&:first-child {
